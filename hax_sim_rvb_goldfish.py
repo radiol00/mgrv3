@@ -70,7 +70,6 @@ while runner.running:
 
     stats.addExperience(experience)
 
-    redaldo.memory.remember(experience)
     actorLoss, criticLoss = redaldo.tryToLearn(experience, env)
     if actorLoss is not None and criticLoss is not None:
         print(formatLosses(actorLoss, criticLoss))

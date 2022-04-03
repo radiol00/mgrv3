@@ -21,10 +21,6 @@ class ArgumentParser:
                             dest='blue_actor_weights', default=None,
                             help="path to blue actor network weights")
 
-        parser.add_argument('-tf', '--test_frame',
-                            dest='test_frame', default=False, action="store_true",
-                            help="if set, program only saves test frame to be sure what model will see")
-
         parser.add_argument('-ls',
                             dest='learning_sessions', type=int, default=0,
                             help="# of completed learning sessions, this value is used by planner to choose correct learning stage")
@@ -40,8 +36,6 @@ class ArgumentParser:
 
         self.blueCriticWeights = args.blue_critic_weights
         self.blueActorWeights = args.blue_actor_weights
-
-        self.testFrame = args.test_frame
 
         self.learningSessions = args.learning_sessions
 

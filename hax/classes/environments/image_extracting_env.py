@@ -22,13 +22,13 @@ class ImageExtractingEnvironment(Environment):
             self.top = 327
         self.screenRecorder = mss.mss()
 
-        ballFile = "pics/ball.png"
+        ballFile = "hax/resources/pics/ball.png"
         self.ball = cv2.imread(ballFile)
 
-        redFile = "pics/red.png"
+        redFile = "hax/resources/pics/red.png"
         self.red = cv2.imread(redFile)
 
-        blueFile = "pics/blue.png"
+        blueFile = "hax/resources/pics/blue.png"
         self.blue = cv2.imread(blueFile)
 
         self.controller = KeyboardController()

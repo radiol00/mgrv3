@@ -8,11 +8,11 @@ from hax.utils.formatters import *
 args = ArgumentParser()
 env = ImageExtractingEnvironment(timeToLive=10 * 120)
 
-redaldo = PPOAgent(
-    name="REDALDO",
+bluessi = PPOAgent(
+    name="BLUESSI",
     model=SampleEfficientSmallPPOModel(
-        actorWeightsPath=args.redActorWeights,
-        criticWeightsPath=args.redCriticWeights,
+        actorWeightsPath=args.blueActorWeights,
+        criticWeightsPath=args.blueCriticWeights,
         learningSessions=args.learningSessions
     ),
     memorySize=24,
@@ -21,17 +21,17 @@ redaldo = PPOAgent(
 runner = Runner()
 while runner.running:
     state = env.getState(keepLastState=True)
-    actionRed, logProb, probs, val = redaldo.chooseAction(state)
-    env.doAction(actionRed, env.Action.NO)
+    actionBlue, logProb, probs, val = bluessi.chooseAction(state)
+    env.doAction(actionBlue, env.Action.NO)
 
     nextState = env.getState(keepLastState=False)
-    reward = env.getReward(nextState, env.Team.RED)
+    reward = env.getReward(nextState, env.Team.BLUE)
 
     print(
         formatAPS(env.synchronizer.aps) + \
         formatActionProbabilities(probs) + \
         " " + \
-        formatAction(actionRed) + \
+        formatAction(actionBlue) + \
         " " + \
         formatReward(reward.value)
     )

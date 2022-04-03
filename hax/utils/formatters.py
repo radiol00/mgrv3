@@ -2,11 +2,11 @@ from hax.interfaces.environment import Environment
 from hax.interfaces.ppo_model import PPOModel
 
 
-def formatFPS(fps):
-    if fps is None:
+def formatAPS(aps):
+    if aps is None:
         return ""
     else:
-        return f"[{fps}]"
+        return f"[{aps}]"
 
 
 def formatLearningSessionInfo(newMemories, memorySize, learningSessions):

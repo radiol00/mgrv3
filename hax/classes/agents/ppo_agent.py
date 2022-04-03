@@ -23,6 +23,8 @@ class PPOAgent(Agent):
         return self.memory.newMemories >= self.model.batchSize
 
     def tryToLearn(self, experience: Memory.Experience, environment: Environment):
+        self.memory.remember(experience)
+
         if experience.done:
             self.memory.remember(experience)
             environment.refresh()
