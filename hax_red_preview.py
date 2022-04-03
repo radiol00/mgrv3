@@ -9,11 +9,11 @@ args = ArgumentParser()
 env = ImageExtractingEnvironment(timeToLive=10 * 120)
 
 redaldo = PPOAgent(
-    name="REDALDO",
     model=SampleEfficientSmallPPOModel(
         actorWeightsPath=args.redActorWeights,
         criticWeightsPath=args.redCriticWeights,
-        learningSessions=args.learningSessions
+        learningSessions=args.learningSessions,
+        name="RED_PREVIEW"
     ),
     memorySize=24,
 )
@@ -25,7 +25,7 @@ while runner.running:
     env.doAction(actionRed, env.Action.NO)
 
     nextState = env.getState(keepLastState=False)
-    reward = env.getReward(nextState, env.Team.RED)
+    reward = env.getReward(nextState, env.Team.Red)
 
     print(
         formatAPS(env.synchronizer.aps) + \

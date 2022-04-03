@@ -9,11 +9,11 @@ args = ArgumentParser()
 env = ImageExtractingEnvironment(timeToLive=10 * 120)
 
 bluessi = PPOAgent(
-    name="BLUESSI",
     model=SampleEfficientSmallPPOModel(
         actorWeightsPath=args.blueActorWeights,
         criticWeightsPath=args.blueCriticWeights,
-        learningSessions=args.learningSessions
+        learningSessions=args.learningSessions,
+        name="BLUE_PREVIEW"
     ),
     memorySize=24,
 )
@@ -25,7 +25,7 @@ while runner.running:
     env.doAction(actionBlue, env.Action.NO)
 
     nextState = env.getState(keepLastState=False)
-    reward = env.getReward(nextState, env.Team.BLUE)
+    reward = env.getReward(nextState, env.Team.Blue)
 
     print(
         formatAPS(env.synchronizer.aps) + \

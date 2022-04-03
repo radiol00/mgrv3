@@ -94,7 +94,7 @@ class Statistics:
                         "enemy_v_y": enemy_v_y,
                     }
                     for key in Environment.getRewardComponentKeys():
-                        record[key] = mem.value.rewardComponents[key]
+                        record[key] = mem.value.rewardComponents[key] if key in mem.value.rewardComponents else None
                     writer.writerow(record)
 
         if len(self.actorLossMemory) > 0:

@@ -33,14 +33,13 @@ class PPOModel:
     criticOptimizer = Adam(learning_rate=lrC)
     # ----
 
-    modelsDir = "models"
-    name = "PPO"
     actor: Model
     critic: Model
     saveWeightsPerLS = 5
     stage = -1
 
-    def __init__(self, actorWeightsPath, criticWeightsPath, learningSessions):
+    def __init__(self, actorWeightsPath, criticWeightsPath, learningSessions, name):
+        self.name = name
         self.learningSessions = learningSessions
         self.stateShape = Environment.State.getShape()
         self.actionQuantity = Environment.Action.getQuantity()
@@ -88,7 +87,7 @@ class PPOModel:
         return prediction
 
     def saveWeights(self):
-        path = os.path.join(self.modelsDir, self.name)
+        path = os.path.join("models", self.name)
         if not os.path.exists(path):
             os.makedirs(path)
         t = time.time()
