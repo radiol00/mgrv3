@@ -26,7 +26,7 @@ class SimulationEnvironment(Environment):
             return [0, 2, 0]
         elif action == Environment.Action.DR:
             return [2, 2, 0]
-        elif action == Environment.Action.X_:
+        elif action == Environment.Action.X:
             return [1, 1, 1]
         elif action == Environment.Action.UX:
             return [1, 0, 1]

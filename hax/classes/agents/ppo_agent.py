@@ -9,9 +9,10 @@ from hax.interfaces.ppo_model import PPOModel
 class PPOAgent(Agent):
     from tensorflow_probability.python.distributions import Categorical
 
-    def __init__(self, model: PPOModel, memorySize: int = 120, name=None):
-        super().__init__(name="PPO" if name is None else "PPO_"+name)
+    def __init__(self, model: PPOModel, memorySize: int = 120, name="PPO"):
+        super().__init__(name=name)
         self.model = model
+        self.name = self.model.name + "_" + self.name
         self.memory = Memory(size=memorySize)
         self.isTeachable = True
 
@@ -20,6 +21,30 @@ class PPOAgent(Agent):
 
     def canForceLearn(self):
         return self.memory.newMemories >= self.model.batchSize
+
+    def tryToLearn(self, experience: Memory.Experience, environment: Environment):
+        if experience.done:
+            self.memory.remember(experience)
+            environment.refresh()
+            if self.canForceLearn():
+                environment.onLearn()
+                actorLoss, criticLoss = self.learn()
+                return actorLoss, criticLoss
+            else:
+                self.memory.refresh()
+        elif self.canLearn():
+            environment.onLearn()
+            actorLoss, criticLoss = self.learn()
+            return actorLoss, criticLoss
+        elif environment.isOld():
+            environment.refresh()
+            if self.canForceLearn():
+                environment.onLearn()
+                actorLoss, criticLoss = self.learn()
+                return actorLoss, criticLoss
+            else:
+                self.memory.refresh()
+        return None, None
 
     def learn(self):
         actorLoss, criticLoss = self.model.learn(self.memory)

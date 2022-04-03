@@ -18,5 +18,5 @@ class StationaryAgent(Agent):
     def learn(self) -> (PPOModel.Loss, PPOModel.Loss):
         raise NotImplementedError
 
-    def chooseAction(self, state: Environment.State) -> (Environment.Action, Any, Any, Any):
-        return Environment.Action.NO, None, None, None
+    def chooseAction(self, state: Environment.State) -> Environment.Action:
+        return Environment.Action.NO

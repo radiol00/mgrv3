@@ -4,8 +4,8 @@ from hax.interfaces.ppo_model import PPOModel
 
 
 class SampleEfficientSmallPPOModel(PPOModel):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, actorWeightsPath, criticWeightsPath, learningSessions):
+        super().__init__(actorWeightsPath=actorWeightsPath, criticWeightsPath=criticWeightsPath, learningSessions=learningSessions)
         self.name = "SAMPLE_EFFICIENT_SMALL"
         self.saveWeightsPerLS = 100
 

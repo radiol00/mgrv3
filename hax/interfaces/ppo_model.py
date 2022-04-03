@@ -40,13 +40,17 @@ class PPOModel:
     saveWeightsPerLS = 5
     stage = -1
 
-    def __init__(self):
-        self.learningSessions = 0
+    def __init__(self, actorWeightsPath, criticWeightsPath, learningSessions):
+        self.learningSessions = learningSessions
         self.stateShape = Environment.State.getShape()
         self.actionQuantity = Environment.Action.getQuantity()
 
+        self.actorWeightsPath = actorWeightsPath
+        self.criticWeightsPath = criticWeightsPath
+
         self.actor, self.critic = self.buildModels()
 
+        self.loadWeights()
         self.usePlanner()
 
     def setActorLearningRate(self, val):
@@ -92,13 +96,13 @@ class PPOModel:
         self.critic.save_weights(os.path.join(path, self.name + f"-{self.learningSessions}-{t}-critic.hdf5"))
         print(f"{self.name} weights saved")
 
-    def loadWeights(self, criticWeightsPath, actorWeightsPath):
-        if criticWeightsPath is not None:
-            self.critic.load_weights(criticWeightsPath)
+    def loadWeights(self):
+        if self.criticWeightsPath is not None:
+            self.critic.load_weights(self.criticWeightsPath)
             print(f"{self.name} critic weights loaded")
 
-        if actorWeightsPath is not None:
-            self.actor.load_weights(actorWeightsPath)
+        if self.actorWeightsPath is not None:
+            self.actor.load_weights(self.actorWeightsPath)
             print(f"{self.name} actor weights loaded")
 
     def setLearningSessions(self, val):
