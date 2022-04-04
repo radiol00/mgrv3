@@ -7,6 +7,7 @@ from hax.classes.memory import Memory
 from hax.interfaces.environment import Environment
 from hax.interfaces.ppo_model import PPOModel
 
+import pandas as pd
 
 class Statistics:
 
@@ -125,3 +126,45 @@ class Statistics:
 
         self.clearMemory()
         self.dumpIndex += 1
+
+    @staticmethod
+    def load(path, limitExperiences=None) -> (pd.DataFrame, pd.DataFrame, pd.DataFrame):
+        dirs = [os.path.join(path, directory) for directory in os.listdir(path)]
+        exp_files = []
+        a_loss_files = []
+        c_loss_files = []
+        for directory in dirs:
+            for file in os.listdir(directory):
+                if file.endswith("experiences.csv"):
+                    exp_files.append(os.path.join(directory, file))
+                elif file.endswith("actorLoss.csv"):
+                    a_loss_files.append(os.path.join(directory, file))
+                elif file.endswith("criticLoss.csv"):
+                    c_loss_files.append(os.path.join(directory, file))
+
+        exp_csvs = []
+        count = 0
+        for i in range(len(exp_files)):
+            exp_csv = pd.read_csv(exp_files[i])
+            exp_csvs.append(exp_csv)
+            count += len(exp_csv)
+            if limitExperiences is not None:
+                if count > limitExperiences:
+                    break
+
+        experiences = pd.concat(exp_csvs, ignore_index=True)
+        actorLosses = pd.concat((pd.read_csv(f) for f in a_loss_files), ignore_index=True)
+        criticLosses = pd.concat((pd.read_csv(f) for f in c_loss_files), ignore_index=True)
+
+        if limitExperiences is not None:
+            experiences = experiences[:limitExperiences]
+
+        experiences.sort_values("ts")
+        actorLosses.sort_values("ts")
+        criticLosses.sort_values("ts")
+
+        experiences["win"] = experiences.apply(lambda x: x["done"] == True and x["reward"] > 0, axis=1)
+        experiences["lose"] = experiences.apply(lambda x: x["done"] == True and x["reward"] < 0, axis=1)
+        experiences["draw"] = experiences.apply(lambda x: x["done"] == True and x["reward"] == 0, axis=1)
+
+        return experiences, actorLosses, criticLosses
