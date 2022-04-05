@@ -13,7 +13,6 @@ class PPOAgent(Agent):
         super().__init__()
         self.model = model
         self.memory = Memory(size=memorySize)
-        self.isTeachable = True
 
     def canLearn(self):
         return self.memory.newMemories >= self.memory.size
