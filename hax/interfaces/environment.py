@@ -9,6 +9,9 @@ class Environment:
     blueGateX = 740
     blueGateY = 205
 
+    mapWidth = 840
+    mapHeight = 410
+
     class Team(Enum):
         Red, Blue = range(2)
 
@@ -39,10 +42,10 @@ class Environment:
 
             def normalize(self) -> Normalized:
                 return self.Normalized(
-                    x=(self.x / 840) - 0.5,
-                    y=(self.y / 410) - 0.5,
-                    dx=(self.dx / 840),
-                    dy=(self.dy / 410)
+                    x=(self.x / Environment.mapWidth) - 0.5,
+                    y=(self.y / Environment.mapHeight) - 0.5,
+                    dx=(self.dx / Environment.mapWidth),
+                    dy=(self.dy / Environment.mapHeight)
                 )
 
         def __init__(self, red: MapObject, blue: MapObject, ball: MapObject):

@@ -122,9 +122,9 @@ class ImageExtractingEnvironment(Environment):
 
     def getMonitor(self):
         if platform.system() == 'Darwin':
-            monitor = {'top': self.top, 'left': self.left, 'width': 420, 'height': 205}
+            monitor = {'top': self.top, 'left': self.left, 'width': Environment.mapWidth//2, 'height': Environment.mapHeight//2}
         else:
-            monitor = {'top': self.top, 'left': self.left, 'width': 840, 'height': 410}
+            monitor = {'top': self.top, 'left': self.left, 'width': Environment.mapWidth, 'height': Environment.mapHeight}
         return monitor
 
     def __getFrame(self) -> np.array:

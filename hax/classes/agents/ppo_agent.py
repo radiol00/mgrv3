@@ -1,6 +1,6 @@
 from typing import Any
 
-from hax.classes.memory import Memory
+from hax.utils.memory import Memory
 from hax.interfaces.agent import Agent
 from hax.interfaces.environment import Environment
 from hax.interfaces.ppo_model import PPOModel
@@ -9,10 +9,9 @@ from hax.interfaces.ppo_model import PPOModel
 class PPOAgent(Agent):
     from tensorflow_probability.python.distributions import Categorical
 
-    def __init__(self, model: PPOModel, memorySize: int = 120, name="PPO"):
-        super().__init__(name=name)
+    def __init__(self, model: PPOModel, memorySize: int = 120):
+        super().__init__()
         self.model = model
-        self.name = self.model.name + "_" + self.name
         self.memory = Memory(size=memorySize)
         self.isTeachable = True
 

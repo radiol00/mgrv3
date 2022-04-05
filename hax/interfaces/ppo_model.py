@@ -2,7 +2,7 @@ import numpy as np
 import os
 import time
 
-from hax.classes.memory import Memory
+from hax.utils.memory import Memory
 from hax.interfaces.environment import Environment
 
 

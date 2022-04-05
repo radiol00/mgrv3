@@ -51,9 +51,12 @@ class SimulationEnvironment(Environment):
         self.game.reset()
 
     def getState(self, keepLastState: bool) -> Environment.State:
-        red_pos = (np.array(self.game._match._game.players[0].disc.position) + [420, 205]).astype(int)
-        blue_pos = (np.array(self.game._match._game.players[1].disc.position) + [420, 205]).astype(int)
-        ball_pos = (np.array(self.game._match._game.stadium_game.discs[0].position) + [420, 205]).astype(int)
+        red_pos = (np.array(self.game._match._game.players[0].disc.position) +
+                   [Environment.mapWidth//2, Environment.mapHeight//2]).astype(int)
+        blue_pos = (np.array(self.game._match._game.players[1].disc.position) +
+                    [Environment.mapWidth//2, Environment.mapHeight//2]).astype(int)
+        ball_pos = (np.array(self.game._match._game.stadium_game.discs[0].position) +
+                    [Environment.mapWidth//2, Environment.mapHeight//2]).astype(int)
         rx, ry = red_pos
         bx, by = blue_pos
         ballx, bally = ball_pos

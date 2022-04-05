@@ -1,7 +1,6 @@
 from hax.classes.agents.ppo_agent import PPOAgent
 from hax.classes.environments.simulation_environment import SimulationEnvironment
-from hax.classes.memory import Memory
-from hax.classes.models.sample_efficient_small import SampleEfficientSmallPPOModel
+from hax.utils.memory import Memory
 from hax.classes.models.small import SmallPPOModel
 from hax.utils.argument_parser import ArgumentParser
 from hax.utils.runner import Runner
@@ -10,7 +9,7 @@ from hax.utils.formatters import *
 
 args = ArgumentParser()
 env = SimulationEnvironment(timeToLive=10 * 120)
-runName = "GOLDFISH_BLUESSI_VS_LEARNED_REDALDO_FASTEST_SMALL"
+runName = "HALF_MEM_BLUESSI_VS_LEARNED_REDALDO_SMALL"
 
 redaldo = PPOAgent(
     model=SmallPPOModel(
@@ -23,13 +22,13 @@ redaldo = PPOAgent(
 )
 
 bluessi = PPOAgent(
-    model=SampleEfficientSmallPPOModel(
+    model=SmallPPOModel(
         actorWeightsPath=args.blueActorWeights,
         criticWeightsPath=args.blueCriticWeights,
         learningSessions=args.learningSessions,
         name=runName
     ),
-    memorySize=24,
+    memorySize=60,
 )
 
 stats = Statistics(

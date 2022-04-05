@@ -3,7 +3,7 @@ import os
 import csv
 from typing import List
 
-from hax.classes.memory import Memory
+from hax.utils.memory import Memory
 from hax.interfaces.environment import Environment
 from hax.interfaces.ppo_model import PPOModel
 
