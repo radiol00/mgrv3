@@ -30,6 +30,6 @@ class SmallPPOModel(PPOModel):
         critic = Model([CinputL], [CqValueL])
 
         return actor, critic
-
+        
     def usePlanner(self):
         pass

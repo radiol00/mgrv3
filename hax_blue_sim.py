@@ -9,7 +9,7 @@ from hax.utils.formatters import *
 
 args = ArgumentParser()
 env = SimulationEnvironment(timeToLive=10 * 120)
-runName = "HALF_MEM_BLUESSI_VS_LEARNED_REDALDO_SMALL"
+runName = "QUARTER_MEM_BLUESSI_VS_LEARNED_REDALDO_SMALL"
 
 redaldo = PPOAgent(
     model=SmallPPOModel(
@@ -28,7 +28,7 @@ bluessi = PPOAgent(
         learningSessions=args.learningSessions,
         name=runName
     ),
-    memorySize=60,
+    memorySize=32,
 )
 
 stats = Statistics(
@@ -39,7 +39,7 @@ stats = Statistics(
 if args.learningSessions == 0:
     bluessi.model.saveWeights()
 
-runner = Runner()
+runner = Runner(command="h")
 while runner.running:
     state = env.getState(keepLastState=True)
     actionRed, _, _, _ = redaldo.chooseAction(state)
