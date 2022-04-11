@@ -57,4 +57,4 @@ class PPOAgent(Agent):
         val = self.model.criticPredict(state)
         distribution = self.Categorical(probs=probs)
         action_index = distribution.sample()
-        return Environment.Action(action_index), distribution.log_prob(action_index), probs, val
+        return Environment.Action(action_index), distribution.log_prob(action_index), probs, val.numpy()

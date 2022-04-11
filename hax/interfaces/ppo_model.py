@@ -41,11 +41,11 @@ class PPOModel:
     def __init__(self, actorWeightsPath, criticWeightsPath, learningSessions, name):
         self.name = name
         self.learningSessions = learningSessions
+        self.actorWeightsPath = actorWeightsPath
+        self.criticWeightsPath = criticWeightsPath
         self.stateShape = Environment.State.getShape()
         self.actionQuantity = Environment.Action.getQuantity()
 
-        self.actorWeightsPath = actorWeightsPath
-        self.criticWeightsPath = criticWeightsPath
 
         self.actor, self.critic = self.buildModels()
 
@@ -104,9 +104,6 @@ class PPOModel:
             self.actor.load_weights(self.actorWeightsPath)
             print(f"{self.name} actor weights loaded")
 
-    def setLearningSessions(self, val):
-        self.learningSessions = val
-
     def calculateAdvantages(self, batch, memory: Memory):
         advantages = []
         for t in range(memory.memories - batch, memory.memories):
@@ -115,8 +112,8 @@ class PPOModel:
             for i in range(t, memory.memories - 1):
                 reward = memory.rewards[i]
                 done = memory.dones[i]
-                val = memory.vals[i].numpy()
-                next_val = memory.vals[i+1].numpy()
+                val = memory.vals[i]
+                next_val = memory.vals[i+1]
                 advantage += reduction * (reward + self.discountFactor * next_val * (1 - int(done)) - val)
                 reduction = reduction * self.discountFactor * self.lambdaVal
             advantages.append(advantage)
@@ -129,19 +126,18 @@ class PPOModel:
         print("Learning...")
         batchesQuan = memory.newMemories // self.batchSize
         lastMemories = batchesQuan * self.batchSize
-        advantages = self.calculateAdvantages(lastMemories, memory)
-        dif = memory.memories - lastMemories
         batch = np.arange(memory.memories - lastMemories, memory.memories)
         np.random.shuffle(batch)
         batches = [batch[i * self.batchSize:(i + 1) * self.batchSize] for i in range((len(batch) + self.batchSize - 1) // self.batchSize)]
         actorLosses = []
         criticLosses = []
+        advantages = self.calculateAdvantages(lastMemories, memory)
         for batch in batches:
             states = memory.getStatesBatch(batch)
             logProbs = self.tf.math.exp(memory.getLogProbsBatch(batch))
             actions = memory.getActionsBatch(batch)
             vals = memory.getValsBatch(batch)
-            adv = [advantages[i - dif] for i in batch]
+            adv = [advantages[i - (memory.memories - lastMemories)] for i in batch]
             adv = self.tf.convert_to_tensor(adv, dtype=self.tf.float32)
 
             for i in range(self.epochs):

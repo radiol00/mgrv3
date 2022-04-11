@@ -9,7 +9,7 @@ from hax.utils.formatters import *
 
 args = ArgumentParser()
 env = SimulationEnvironment(timeToLive=10 * 120)
-runName = "QUARTER_MEM_BLUESSI_VS_LEARNED_REDALDO_SMALL"
+runName = "DOUBLE_MEM_BIGGER_LR_BLUESSI_VS_LEARNED_REDALDO_SMALL"
 
 redaldo = PPOAgent(
     model=SmallPPOModel(
@@ -28,7 +28,7 @@ bluessi = PPOAgent(
         learningSessions=args.learningSessions,
         name=runName
     ),
-    memorySize=32,
+    memorySize=240,
 )
 
 stats = Statistics(
