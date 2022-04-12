@@ -1,3 +1,4 @@
+from haxballgym.utils.terminal_conditions import GoalScoredCondition
 from hax.interfaces.environment import Environment
 from haxballgym import make
 from haxballgym.game import Game
@@ -47,7 +48,7 @@ class SimulationEnvironment(Environment):
 
     def __init__(self, timeToLive=120 * 5, stadiumFile="small.hbs"):
         super().__init__(timeToLive=timeToLive)
-        self.game = make(game=Game(stadium_file=stadiumFile))
+        self.game = make(game=Game(stadium_file=stadiumFile), terminal_conditions=[GoalScoredCondition()])
         self.game.reset()
 
     def getState(self, keepLastState: bool) -> Environment.State:

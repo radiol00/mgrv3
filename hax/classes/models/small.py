@@ -10,8 +10,8 @@ class SmallPPOModel(PPOModel):
         self.saveWeightsPerLS = 100
 
         self.setBatchSize(8)
-        self.setActorLearningRate(1e-4)
-        self.setCriticLearningRate(1e-3)
+        self.setActorLearningRate(1e-5)
+        self.setCriticLearningRate(1e-4)
         self.setEpochs(8)
 
     def buildModels(self) -> (Model, Model):
