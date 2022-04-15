@@ -24,7 +24,6 @@ class PPOAgent(Agent):
         self.memory.remember(experience)
 
         if experience.done:
-            self.memory.remember(experience)
             environment.refresh()
             if self.canForceLearn():
                 environment.onLearn()

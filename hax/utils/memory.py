@@ -25,16 +25,15 @@ class Memory:
         self.memories = 0
 
     def remember(self, experience: Experience):
-        for _ in range(2 if experience.done else 1):
-            self.states.append(experience.normalized_state)
-            self.rewards.append(experience.reward)
-            self.dones.append(experience.done)
-            self.actionIndexes.append(experience.actionIndex)
-            self.logProbs.append(experience.logProb)
-            self.vals.append(experience.val)
+        self.states.append(experience.normalized_state)
+        self.rewards.append(experience.reward)
+        self.dones.append(experience.done)
+        self.actionIndexes.append(experience.actionIndex)
+        self.logProbs.append(experience.logProb)
+        self.vals.append(experience.val)
 
-            self.newMemories += 1
-            self.memories = len(self.states)
+        self.newMemories += 1
+        self.memories = len(self.states)
 
     def refresh(self):
         self.newMemories = 0

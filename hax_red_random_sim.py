@@ -20,7 +20,7 @@ redaldo = PPOAgent(
         learningSessions=args.learningSessions,
         name=runName
     ),
-    memorySize=240,
+    memorySize=120,
 )
 
 bluessi = RandomAgent()
@@ -30,8 +30,8 @@ stats = Statistics(
     statisticsSubDir=runName
 )
 
-if args.learningSessions == 0:
-    redaldo.model.saveWeights()
+# if args.learningSessions == 0:
+#     redaldo.model.saveWeights()
 
 runner = Runner(command="h")
 while runner.running:
@@ -40,6 +40,14 @@ while runner.running:
     actionBlue = bluessi.chooseAction(state)
     env.doAction(actionRed, actionBlue)
     reward = env.getReward(env.getState(keepLastState=False), env.Team.Red)
+
+    if reward.done == True:
+        if reward.value < 0:
+            print("LOSE")
+        elif reward.value > 0:
+            print("WIN")
+        else:
+            print("DRAW")
 
     experience = Memory.Experience(
         normalized_state=state.toStateVector(normalized=True),
