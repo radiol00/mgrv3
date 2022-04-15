@@ -30,8 +30,8 @@ stats = Statistics(
     statisticsSubDir=runName
 )
 
-# if args.learningSessions == 0:
-#     redaldo.model.saveWeights()
+if args.learningSessions == 0:
+    redaldo.model.saveWeights()
 
 runner = Runner(command="h")
 while runner.running:

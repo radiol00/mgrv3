@@ -115,10 +115,9 @@ class PPOModel:
 
             for i in range(t, memory.memories - 1):
                 reward = norm_rewards[i]
-                done = memory.dones[i]
                 val = memory.vals[i]
                 next_val = memory.vals[i+1]
-                advantage += reduction * (reward + self.discountFactor * next_val * (1 - int(done)) - val)
+                advantage += reduction * ((reward + self.discountFactor * next_val) - val)
                 reduction = reduction * self.discountFactor * self.lambdaVal
 
             if t == memory.memories - 1:
