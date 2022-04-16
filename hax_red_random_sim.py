@@ -50,7 +50,7 @@ while runner.running:
             print("DRAW")
 
     experience = Memory.Experience(
-        normalized_state=state.toStateVector(normalized=True),
+        normalizedState=state.toStateVector(normalized=True),
         state=state.toStateVector(normalized=False),
         reward=reward.value,
         rewardComponents=reward.components,

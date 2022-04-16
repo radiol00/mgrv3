@@ -37,14 +37,14 @@ class ImageExtractingEnvironment(Environment):
         self.synchronizer.sync()
 
     def __getStateFromFrame(self, frame, keepLastState=True) -> Environment.State:
-        def threaded_func(args):
+        def threadedFinder(args):
             img, lastPos, threadFrame = args
 
             def findNormally():
                 result = cv2.matchTemplate(threadFrame, img, cv2.TM_SQDIFF_NORMED)
 
-                mn, _, mn_loc, _ = cv2.minMaxLoc(result)
-                x, y = mn_loc
+                mn, _, mnLoc, _ = cv2.minMaxLoc(result)
+                x, y = mnLoc
                 x += int(img.shape[0] / 2)
                 y += int(img.shape[1] / 2) + 1
                 return x, y
@@ -63,11 +63,11 @@ class ImageExtractingEnvironment(Environment):
                 patternThreshold = 0.1
                 portion = getFramePortion(threadFrame, lastX, lastY, portionSize)
                 portionResult = cv2.matchTemplate(portion, img, cv2.TM_SQDIFF_NORMED)
-                pmn, _, pmn_loc, _ = cv2.minMaxLoc(portionResult)
+                pmn, _, pmnLoc, _ = cv2.minMaxLoc(portionResult)
 
                 if pmn > patternThreshold:
                     return findNormally()
-                portionX, portionY = pmn_loc
+                portionX, portionY = pmnLoc
                 portionX += int(img.shape[0] / 2)
                 portionY += int(img.shape[1] / 2) + 1
 
@@ -82,42 +82,42 @@ class ImageExtractingEnvironment(Environment):
                 bx, by, Rx, Ry, Bx, By = self.lastState
                 params = [(self.ball, (bx, by), frame), (self.red, (Rx, Ry), frame), (self.blue, (Bx, By), frame)]
 
-            futures = [executor.submit(threaded_func, param) for param in params]
+            futures = [executor.submit(threadedFinder, param) for param in params]
             returns = [f.result() for f in futures]
 
-        ball_x, ball_y = returns[0]
-        red_x, red_y = returns[1]
-        blue_x, blue_y = returns[2]
+        ballX, ballY = returns[0]
+        redX, redY = returns[1]
+        blueX, blueY = returns[2]
 
         if self.lastState is None:
-            ball_v_x = 0
-            ball_v_y = 0
+            ballVX = 0
+            ballVY = 0
 
-            red_v_x = 0
-            red_v_y = 0
+            redVX = 0
+            redVY = 0
 
-            blue_v_x = 0
-            blue_v_y = 0
+            blueVX = 0
+            blueVY = 0
         else:
-            last_ball_x, last_ball_y, last_player_x, last_player_y, last_enemy_x, last_enemy_y = self.lastState
+            lastBallX, lastBallY, lastPlayerX, lastPlayerY, lastEnemyX, lastEnemyY = self.lastState
 
-            ball_v_x = ball_x - last_ball_x
-            ball_v_y = ball_y - last_ball_y
+            ballVX = ballX - lastBallX
+            ballVY = ballY - lastBallY
 
-            red_v_x = red_x - last_player_x
-            red_v_y = red_y - last_player_y
+            redVX = redX - lastPlayerX
+            redVY = redY - lastPlayerY
 
-            blue_v_x = blue_x - last_enemy_x
-            blue_v_y = blue_y - last_enemy_y
+            blueVX = blueX - lastEnemyX
+            blueVY = blueY - lastEnemyY
 
         if keepLastState:
-            self.lastState = ball_x, ball_y, red_x, red_y, blue_x, blue_y
+            self.lastState = ballX, ballY, redX, redY, blueX, blueY
             self.age += 1
 
         return Environment.State(
-            ball=Environment.State.MapObject(ball_x, ball_y, ball_v_x, ball_v_y),
-            red=Environment.State.MapObject(red_x, red_y, red_v_x, red_v_y),
-            blue=Environment.State.MapObject(blue_x, blue_y, blue_v_x, blue_v_y)
+            ball=Environment.State.MapObject(ballX, ballY, ballVX, ballVY),
+            red=Environment.State.MapObject(redX, redY, redVX, redVY),
+            blue=Environment.State.MapObject(blueX, blueY, blueVX, blueVY)
         )
 
     def getMonitor(self):

@@ -6,7 +6,7 @@ class Runner:
     __onHold = False
 
     def __init__(self, command="q"):
-        self.listener = KeyboardListener(on_press_callback=self.onPressListener)
+        self.listener = KeyboardListener(onPressCallback=self.onPressListener)
         self.listener.start()
         self.command = command
 

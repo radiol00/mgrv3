@@ -52,21 +52,21 @@ class SimulationEnvironment(Environment):
         self.game.reset()
 
     def getState(self, keepLastState: bool) -> Environment.State:
-        red_pos = (np.array(self.game._match._game.players[0].disc.position) +
+        redPos = (np.array(self.game._match._game.players[0].disc.position) +
                    [Environment.mapWidth//2, Environment.mapHeight//2]).astype(int)
-        blue_pos = (np.array(self.game._match._game.players[1].disc.position) +
+        bluePos = (np.array(self.game._match._game.players[1].disc.position) +
                     [Environment.mapWidth//2, Environment.mapHeight//2]).astype(int)
-        ball_pos = (np.array(self.game._match._game.stadium_game.discs[0].position) +
+        ballPos = (np.array(self.game._match._game.stadium_game.discs[0].position) +
                     [Environment.mapWidth//2, Environment.mapHeight//2]).astype(int)
-        rx, ry = red_pos
-        bx, by = blue_pos
-        ballx, bally = ball_pos
+        rx, ry = redPos
+        bx, by = bluePos
+        ballx, bally = ballPos
 
         if self.lastState is not None:
-            last_red_pos, last_blue_pos, last_ball_pos = self.lastState
-            drx, dry = (red_pos - last_red_pos)
-            dbx, dby = (blue_pos - last_blue_pos)
-            dballx, dbally = (ball_pos - last_ball_pos)
+            lastRedPos, lastBluePos, lastBallPos = self.lastState
+            drx, dry = (redPos - lastRedPos)
+            dbx, dby = (bluePos - lastBluePos)
+            dballx, dbally = (ballPos - lastBallPos)
             state = Environment.State(
                 ball=Environment.State.MapObject(x=ballx, y=bally, dx=dballx, dy=dbally),
                 red=Environment.State.MapObject(x=rx, y=ry, dx=drx, dy=dry),
@@ -80,7 +80,7 @@ class SimulationEnvironment(Environment):
             )
 
         if keepLastState:
-            self.lastState = red_pos, blue_pos, ball_pos
+            self.lastState = redPos, bluePos, ballPos
             self.age += 1
         return state
 
