@@ -125,7 +125,6 @@ class PPOModel:
 
             advantages.append(advantage)
 
-
         advantages = np.array(advantages)
         advantages = (advantages - advantages.mean()) / (advantages.std() + 1e-10)
 
@@ -143,13 +142,13 @@ class PPOModel:
         advantages = self.calculateAdvantages(lastMemories, memory)
         for batch in batches:
             states = memory.getStatesBatch(batch)
-            logProbs = self.tf.math.exp(memory.getLogProbsBatch(batch))
             actions = memory.getActionsBatch(batch)
+            logProbs = self.tf.math.exp(memory.getLogProbsBatch(batch))
             vals = memory.getValsBatch(batch)
             adv = [advantages[i - (memory.memories - lastMemories)] for i in batch]
             adv = self.tf.convert_to_tensor(adv, dtype=self.tf.float32)
 
-            for i in range(self.epochs):
+            for _ in range(self.epochs):
                 with self.tf.GradientTape() as tape1, self.tf.GradientTape() as tape2:
                     probs = self.actor(states)
                     probs = self.tf.clip_by_value(probs, clip_value_min=1e-30, clip_value_max=1e+30)
