@@ -3,8 +3,8 @@ class Memory:
     from collections import deque
 
     class Experience:
-        def __init__(self, normalized_state, state, reward, rewardComponents, done, actionIndex, val, prob):
-            self.normalized_state = normalized_state
+        def __init__(self, normalizedState, state, reward, rewardComponents, done, actionIndex, val, prob):
+            self.normalizedState = normalizedState
             self.state = state
             self.reward = reward
             self.rewardComponents = rewardComponents
@@ -25,7 +25,7 @@ class Memory:
         self.memories = 0
 
     def remember(self, experience: Experience):
-        self.states.append(experience.normalized_state)
+        self.states.append(experience.normalizedState)
         self.rewards.append(experience.reward)
         self.dones.append(experience.done)
         self.actionIndexes.append(experience.actionIndex)

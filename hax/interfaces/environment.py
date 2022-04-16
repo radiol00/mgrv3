@@ -64,9 +64,9 @@ class Environment:
             return [ball.x, ball.y, ball.dx, ball.dy, red.x, red.y, red.dx, red.dy, blue.x, blue.y, blue.dx, blue.dy]
 
     class Reward:
-        draw_reward = 0
-        win_reward = 200
-        lose_reward = -200
+        drawReward = 0
+        winReward = 200
+        loseReward = -200
 
         def __init__(self, value: int, components: dict, done: bool):
             self.value = value
@@ -82,7 +82,7 @@ class Environment:
             return self.Reward(
                 done=True,
                 components={},
-                value=self.Reward.draw_reward
+                value=self.Reward.drawReward
             )
 
         components = {}
@@ -99,14 +99,14 @@ class Environment:
         # CHECK FOR GOAL
         if state.ball.x >= self.blueGateX:
             return self.Reward(
-                value=self.Reward.win_reward if team == Environment.Team.Red else self.Reward.lose_reward,
+                value=self.Reward.winReward if team == Environment.Team.Red else self.Reward.loseReward,
                 components=components,
                 done=True
             )
 
         if state.ball.x <= self.redGateX:
             return self.Reward(
-                value=self.Reward.win_reward if team == Environment.Team.Blue else self.Reward.lose_reward,
+                value=self.Reward.winReward if team == Environment.Team.Blue else self.Reward.loseReward,
                 components=components,
                 done=True
             )

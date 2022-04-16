@@ -106,22 +106,22 @@ class PPOModel:
 
     def calculateAdvantages(self, batch, memory: Memory):
         advantages = []
-        norm_rewards = np.array(memory.rewards)
-        norm_rewards = (norm_rewards - norm_rewards.mean()) / (norm_rewards.std() + 1e-10)
+        normRewards = np.array(memory.rewards)
+        normRewards = (normRewards - normRewards.mean()) / (normRewards.std() + 1e-10)
         for t in range(memory.memories - batch, memory.memories):
 
             advantage = 0
             reduction = 1
 
             for i in range(t, memory.memories - 1):
-                reward = norm_rewards[i]
+                reward = normRewards[i]
                 val = memory.vals[i]
-                next_val = memory.vals[i+1]
-                advantage += reduction * ((reward + self.discountFactor * next_val) - val)
+                nextVal = memory.vals[i+1]
+                advantage += reduction * ((reward + self.discountFactor * nextVal) - val)
                 reduction = reduction * self.discountFactor * self.lambdaVal
 
             if t == memory.memories - 1:
-                advantage = norm_rewards[t]
+                advantage = normRewards[t]
 
             advantages.append(advantage)
 

@@ -6,23 +6,21 @@ from hax.interfaces.environment import Environment
 class KeyboardListener:
     from pynput.keyboard import Listener
 
-    def __init__(self, on_press_callback=lambda: None):
-        self.listener = self.Listener(on_press=on_press_callback)
-        self.listener_alive = False
+    def __init__(self, onPressCallback=lambda: None):
+        self.listener = self.Listener(on_press=onPressCallback)
+        self.listenerAlive = False
 
     def start(self):
         self.listener.start()
-        self.listener_alive = True
+        self.listenerAlive = True
 
     def dispose(self):
         self.listener.stop()
-        self.listener_alive = False
+        self.listenerAlive = False
 
 
 class KeyboardController:
     import platform
-    listener = None
-    listener_alive = False
     isDarwin = platform.system() == "Darwin"
 
     if isDarwin:
