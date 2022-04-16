@@ -43,7 +43,7 @@ runner = Runner(command="h")
 while runner.running:
     state = env.getState(keepLastState=True)
     actionRed, _, _, _ = redaldo.chooseAction(state)
-    actionBlue, logProb, probs, val = bluessi.chooseAction(state)
+    actionBlue, probs, val = bluessi.chooseAction(state)
     env.doAction(actionRed, actionBlue)
 
     reward = env.getReward(env.getState(keepLastState=False), env.Team.Blue)
@@ -71,7 +71,7 @@ while runner.running:
         done=reward.done,
         actionIndex=actionBlue.value,
         val=val,
-        logProb=logProb,
+        prob=prob,
     )
 
     stats.addExperience(experience)

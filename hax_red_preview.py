@@ -21,7 +21,7 @@ redaldo = PPOAgent(
 runner = Runner()
 while runner.running:
     state = env.getState(keepLastState=True)
-    actionRed, logProb, probs, val = redaldo.chooseAction(state)
+    actionRed, probs, val = redaldo.chooseAction(state)
     env.doAction(actionRed, env.Action.NO)
 
     nextState = env.getState(keepLastState=False)

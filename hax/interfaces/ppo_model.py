@@ -143,20 +143,20 @@ class PPOModel:
         for batch in batches:
             states = memory.getStatesBatch(batch)
             actions = memory.getActionsBatch(batch)
-            logProbs = self.tf.math.exp(memory.getLogProbsBatch(batch))
+            oldProbs = memory.getProbsBatch(batch)
             vals = memory.getValsBatch(batch)
             adv = [advantages[i - (memory.memories - lastMemories)] for i in batch]
             adv = self.tf.convert_to_tensor(adv, dtype=self.tf.float32)
 
             for _ in range(self.epochs):
                 with self.tf.GradientTape() as tape1, self.tf.GradientTape() as tape2:
-                    probs = self.actor(states)
-                    probs = self.tf.clip_by_value(probs, clip_value_min=1e-30, clip_value_max=1e+30)
+                    actionsProb = self.actor(states)
+                    actionsProb = self.tf.clip_by_value(actionsProb, clip_value_min=1e-30, clip_value_max=1e+30)
                     newVals = self.critic(states)
 
-                    dists = self.Categorical(probs=probs)
-                    newLogProbs = self.tf.math.exp(dists.log_prob(actions))
-                    probRatios = self.tf.divide(newLogProbs, logProbs)
+                    dists = self.Categorical(probs=actionsProb)
+                    newProbs = dists.prob(actions)
+                    probRatios = self.tf.divide(newProbs, oldProbs)
 
                     advantageProbs = self.tf.multiply(adv, probRatios)
                     clippedAdvantageProbs = self.tf.multiply(self.tf.clip_by_value(probRatios, 1-self.clip, 1+self.clip), adv)
