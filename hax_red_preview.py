@@ -15,13 +15,13 @@ redaldo = PPOAgent(
         learningSessions=args.learningSessions,
         name="RED_PREVIEW"
     ),
-    memorySize=24,
+    memorySize=0,
 )
 
-runner = Runner()
+runner = Runner(dualCommand=False)
 while runner.running:
     state = env.getState(keepLastState=True)
-    actionRed, probs, val = redaldo.chooseAction(state)
+    actionRed, prob, val, probs = redaldo.chooseAction(state)
     env.doAction(actionRed, env.Action.NO)
 
     nextState = env.getState(keepLastState=False)

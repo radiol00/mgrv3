@@ -35,8 +35,8 @@ class SmallPPOModel(PPOModel):
             self.setEpochs(8)
             self.stage = 0
 
-        if self.stage == 0 and self.learningSessions >= 370000:
+        if self.stage == 0 and self.learningSessions >= 37_000:
             self.setActorLearningRate(5e-6)
             self.setCriticLearningRate(5e-5)
-            self.setBatchSize(4)
+            self.setEpochs(4)
             self.stage = 1

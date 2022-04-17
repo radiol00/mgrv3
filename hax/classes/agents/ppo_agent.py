@@ -46,14 +46,17 @@ class PPOAgent(Agent):
         return None, None
 
     def learn(self):
+        if self.model.learningSessions >= 50_000:
+            print("50_000 REACHED ----------------- DELET DIS")
+            exit(0)
         actorLoss, criticLoss = self.model.learn(self.memory)
         self.model.usePlanner()
         self.memory.refresh()
         return actorLoss, criticLoss
 
-    def chooseAction(self, state: Environment.State) -> (Environment.Action, Any, Any):
+    def chooseAction(self, state: Environment.State) -> (Environment.Action, Any, Any, Any):
         probs = self.model.actorPredict(state)
         val = self.model.criticPredict(state)
         distribution = self.Categorical(probs=probs)
         actionIndex = distribution.sample()
-        return Environment.Action(actionIndex), distribution.prob(actionIndex), val.numpy()
+        return Environment.Action(actionIndex), distribution.prob(actionIndex), val.numpy(), probs

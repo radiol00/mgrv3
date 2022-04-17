@@ -131,7 +131,7 @@ class PPOModel:
         return advantages
 
     def learn(self, memory: Memory) -> (Loss, Loss):
-        print(f"Learning a[{self.lrA}] c[{self.lrC}] epoch[{self.epochs}] batch[{self.batchSize}] discount[{self.discountFactor}] lambda[{self.lambdaVal}] clip[{self.clip}]")
+        print(f"Learning [{self.learningSessions}] actor[{self.lrA}] critic[{self.lrC}] epochs[{self.epochs}] batch[{self.batchSize}] discount[{self.discountFactor}] lambda[{self.lambdaVal}] clip[{self.clip}]")
         batchesQuan = memory.newMemories // self.batchSize
         lastMemories = batchesQuan * self.batchSize
         batch = np.arange(memory.memories - lastMemories, memory.memories)

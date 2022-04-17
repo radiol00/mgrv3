@@ -36,7 +36,7 @@ if args.learningSessions == 0:
 runner = Runner(command="h")
 while runner.running:
     state = env.getState(keepLastState=True)
-    actionRed, prob, val = redaldo.chooseAction(state)
+    actionRed, prob, val, _ = redaldo.chooseAction(state)
     actionBlue = bluessi.chooseAction(state)
     env.doAction(actionRed, actionBlue)
     reward = env.getReward(env.getState(keepLastState=False), env.Team.Red)

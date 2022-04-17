@@ -5,15 +5,19 @@ class Runner:
     running = True
     __onHold = False
 
-    def __init__(self, command="q"):
+    def __init__(self, command="q", dualCommand=True):
         self.listener = KeyboardListener(onPressCallback=self.onPressListener)
         self.listener.start()
         self.command = command
+        self.dualCommand = dualCommand
 
     def onPressListener(self, key):
         try:
             if key.char == self.command.lower() and self.running:
-                self.__onHold = True
+                if self.dualCommand:
+                    self.__onHold = True
+                else:
+                    self.running = False
             elif key.char == self.command.upper() and self.running and self.__onHold:
                 self.__onHold = False
                 self.running = False
