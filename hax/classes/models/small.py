@@ -9,11 +9,6 @@ class SmallPPOModel(PPOModel):
 
         self.saveWeightsPerLS = 100
 
-        self.setBatchSize(8)
-        self.setActorLearningRate(1e-5)
-        self.setCriticLearningRate(1e-4)
-        self.setEpochs(8)
-
     def buildModels(self) -> (Model, Model):
         from tensorflow.keras.layers import Input, Dense
         AinputL = Input(shape=(self.stateShape,))
@@ -31,5 +26,17 @@ class SmallPPOModel(PPOModel):
 
         return actor, critic
         
+    # planner for red vs random
     def usePlanner(self):
-        pass
+        if self.stage == -1:
+            self.setBatchSize(8)
+            self.setActorLearningRate(1e-5)
+            self.setCriticLearningRate(1e-4)
+            self.setEpochs(8)
+            self.stage = 0
+
+        if self.stage == 0 and self.learningSessions >= 370000:
+            self.setActorLearningRate(5e-6)
+            self.setCriticLearningRate(5e-5)
+            self.setBatchSize(4)
+            self.stage = 1
