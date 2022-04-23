@@ -21,8 +21,6 @@ class PPOAgent(Agent):
         return self.memory.newMemories >= self.model.batchSize
 
     def tryToLearn(self, experience: Memory.Experience, environment: Environment):
-        self.memory.remember(experience)
-
         if experience.done:
             environment.refresh()
             if self.canForceLearn():
@@ -46,9 +44,6 @@ class PPOAgent(Agent):
         return None, None
 
     def learn(self):
-        if self.model.learningSessions >= 50_000:
-            print("50_000 REACHED ----------------- DELET DIS")
-            exit(0)
         actorLoss, criticLoss = self.model.learn(self.memory)
         self.model.usePlanner()
         self.memory.refresh()

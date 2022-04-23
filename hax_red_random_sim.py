@@ -35,11 +35,11 @@ if args.learningSessions == 0:
 
 runner = Runner(command="h")
 while runner.running:
-    state = env.getState(keepLastState=True)
+    state = env.getState(bindState=True)
     actionRed, prob, val, _ = redaldo.chooseAction(state)
     actionBlue = bluessi.chooseAction(state)
     env.doAction(actionRed, actionBlue)
-    reward = env.getReward(env.getState(keepLastState=False), env.Team.Red)
+    reward = env.getReward(env.getState(bindState=False), env.Team.Red)
 
     if reward.done == True:
         if reward.value < 0:
@@ -76,12 +76,15 @@ while runner.running:
     # )
 
     stats.addExperience(experience)
+    redaldo.memory.remember(experience)
 
     actorLoss, criticLoss = redaldo.tryToLearn(experience, env)
     if actorLoss is not None and criticLoss is not None:
         print(formatLosses(actorLoss, criticLoss))
         stats.addActorLoss(actorLoss)
         stats.addCriticLoss(criticLoss)
+        if redaldo.model.learningSessions >= 100_000:
+            runner.running = False
 
 runner.dispose()
 env.dispose()

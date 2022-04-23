@@ -20,11 +20,11 @@ redaldo = PPOAgent(
 
 runner = Runner(dualCommand=False)
 while runner.running:
-    state = env.getState(keepLastState=True)
+    state = env.getState(bindState=True)
     actionRed, prob, val, probs = redaldo.chooseAction(state)
     env.doAction(actionRed, env.Action.NO)
 
-    nextState = env.getState(keepLastState=False)
+    nextState = env.getState(bindState=False)
     reward = env.getReward(nextState, env.Team.Red)
 
     print(

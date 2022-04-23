@@ -41,12 +41,12 @@ if args.learningSessions == 0:
 
 runner = Runner(command="h")
 while runner.running:
-    state = env.getState(keepLastState=True)
+    state = env.getState(bindState=True)
     actionRed, _, _, _ = redaldo.chooseAction(state)
     actionBlue, probs, val = bluessi.chooseAction(state)
     env.doAction(actionRed, actionBlue)
 
-    reward = env.getReward(env.getState(keepLastState=False), env.Team.Blue)
+    reward = env.getReward(env.getState(bindState=False), env.Team.Blue)
 
     # print(
     #     formatLearningSessionInfo(newMemories=bluessi.memory.newMemories,

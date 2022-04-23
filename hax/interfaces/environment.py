@@ -167,7 +167,7 @@ class Environment:
         self.forgetLastState()
         self.age = 0
 
-    def getState(self, keepLastState: bool) -> State:
+    def getState(self, bindState: bool) -> State:
         raise NotImplementedError
 
     def doAction(self, actionRed: Action, actionBlue: Action):

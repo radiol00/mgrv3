@@ -51,7 +51,7 @@ class SimulationEnvironment(Environment):
         self.game = make(game=Game(stadium_file=stadiumFile), terminal_conditions=[GoalScoredCondition()])
         self.game.reset()
 
-    def getState(self, keepLastState: bool) -> Environment.State:
+    def getState(self, bindState: bool) -> Environment.State:
         redPos = (np.array(self.game._match._game.players[0].disc.position) +
                    [Environment.mapWidth//2, Environment.mapHeight//2]).astype(int)
         bluePos = (np.array(self.game._match._game.players[1].disc.position) +
@@ -79,7 +79,7 @@ class SimulationEnvironment(Environment):
                 blue=Environment.State.MapObject(x=bx, y=by, dx=0, dy=0)
             )
 
-        if keepLastState:
+        if bindState:
             self.lastState = redPos, bluePos, ballPos
             self.age += 1
         return state

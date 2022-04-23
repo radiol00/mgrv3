@@ -36,7 +36,7 @@ class ImageExtractingEnvironment(Environment):
         self.synchronizer = Synchronizer(apsLimit=aps)
         self.synchronizer.sync()
 
-    def __getStateFromFrame(self, frame, keepLastState=True) -> Environment.State:
+    def __getStateFromFrame(self, frame, bindState=True) -> Environment.State:
         def threadedFinder(args):
             img, lastPos, threadFrame = args
 
@@ -110,7 +110,7 @@ class ImageExtractingEnvironment(Environment):
             blueVX = blueX - lastEnemyX
             blueVY = blueY - lastEnemyY
 
-        if keepLastState:
+        if bindState:
             self.lastState = ballX, ballY, redX, redY, blueX, blueY
             self.age += 1
 
@@ -137,9 +137,9 @@ class ImageExtractingEnvironment(Environment):
         Image.frombytes("RGB", (ss.width, ss.height), ss.rgb).save(path)
         print(f"Test Frame saved to {path}")
 
-    def getState(self, keepLastState: bool) -> Environment.State:
+    def getState(self, bindState: bool) -> Environment.State:
         frame = self.__getFrame()
-        return self.__getStateFromFrame(frame, keepLastState=keepLastState)
+        return self.__getStateFromFrame(frame, bindState=bindState)
 
     def doAction(self, action: Environment.Action, _: Environment.Action):
         self.controller.doAction(action)
