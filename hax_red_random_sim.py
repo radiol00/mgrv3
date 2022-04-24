@@ -83,7 +83,7 @@ while runner.running:
         print(formatLosses(actorLoss, criticLoss))
         stats.addActorLoss(actorLoss)
         stats.addCriticLoss(criticLoss)
-        if redaldo.model.learningSessions >= 100_000:
+        if redaldo.model.learningSessions >= 150_000:
             runner.running = False
 
 runner.dispose()
