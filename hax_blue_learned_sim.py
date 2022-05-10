@@ -91,7 +91,7 @@ while runner.running:
         print(formatLosses(actorLoss, criticLoss))
         stats.addActorLoss(actorLoss)
         stats.addCriticLoss(criticLoss)
-        if bluessi.model.learningSessions >= 150_000:
+        if bluessi.model.learningSessions >= 200_000:
             runner.running = False
 
 runner.dispose()
