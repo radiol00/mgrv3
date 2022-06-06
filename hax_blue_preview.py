@@ -18,10 +18,10 @@ bluessi = PPOAgent(
     memorySize=24,
 )
 
-runner = Runner()
+runner = Runner(dualCommand=False)
 while runner.running:
     state = env.getState(bindState=True)
-    actionBlue, probs, val = bluessi.chooseAction(state)
+    actionBlue, probs, val, probs = bluessi.chooseAction(state)
     env.doAction(actionBlue, env.Action.NO)
 
     nextState = env.getState(bindState=False)

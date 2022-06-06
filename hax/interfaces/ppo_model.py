@@ -60,6 +60,7 @@ class PPOModel:
         self.lrC = val
         self.criticOptimizer = self.Adam(learning_rate=self.lrC)
 
+
     def setEpochs(self, val):
         self.epochs = val
 

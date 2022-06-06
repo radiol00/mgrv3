@@ -128,7 +128,7 @@ class Statistics:
         self.dumpIndex += 1
 
     @staticmethod
-    def load(path, limitExperiences=None) -> (pd.DataFrame, pd.DataFrame, pd.DataFrame):
+    def load(path) -> (pd.DataFrame, pd.DataFrame, pd.DataFrame):
         dirs = [os.path.join(path, directory) for directory in os.listdir(path)]
         exp_files = []
         a_loss_files = []
@@ -148,20 +148,22 @@ class Statistics:
             exp_csv = pd.read_csv(exp_files[i])
             exp_csvs.append(exp_csv)
             count += len(exp_csv)
-            if limitExperiences is not None:
-                if count > limitExperiences:
-                    break
 
         experiences = pd.concat(exp_csvs, ignore_index=True)
         actorLosses = pd.concat((pd.read_csv(f) for f in a_loss_files), ignore_index=True)
         criticLosses = pd.concat((pd.read_csv(f) for f in c_loss_files), ignore_index=True)
 
-        if limitExperiences is not None:
-            experiences = experiences[:limitExperiences]
+        experiences.ts = experiences.ts.astype(float)
+        experiences = experiences.sort_values(["ts"])
+        experiences = experiences.reset_index(drop=True)
 
-        experiences.sort_values("ts")
-        actorLosses.sort_values("ts")
-        criticLosses.sort_values("ts")
+        actorLosses.ts = actorLosses.ts.astype(float)
+        actorLosses = actorLosses.sort_values(["ts"])
+        actorLosses = actorLosses.reset_index(drop=True)
+
+        criticLosses.ts = criticLosses.ts.astype(float)
+        criticLosses = criticLosses.sort_values(["ts"])
+        criticLosses = criticLosses.reset_index(drop=True)
 
         experiences["win"] = experiences.apply(lambda x: x["done"] == True and x["reward"] > 0, axis=1)
         experiences["lose"] = experiences.apply(lambda x: x["done"] == True and x["reward"] < 0, axis=1)

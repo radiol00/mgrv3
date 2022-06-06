@@ -1,8 +1,8 @@
 from hax.classes.agents.ppo_agent import PPOAgent
-from hax.classes.agents.random_agent import RandomAgent
+from hax.classes.agents.stationary_agent import StationaryAgent
 from hax.classes.environments.simulation_environment import SimulationEnvironment
+from hax.classes.models.small_espo import SmallESPOModel
 from hax.utils.memory import Memory
-from hax.classes.models.small import SmallPPOModel
 from hax.utils.argument_parser import ArgumentParser
 from hax.utils.runner import Runner
 from hax.utils.statistics import Statistics
@@ -11,7 +11,7 @@ from hax.utils.formatters import *
 args = ArgumentParser()
 env = SimulationEnvironment(timeToLive=10 * 120)
 
-runName = "FINAL_BLUESSI_VS_LEARNED_REDALDO"
+runName = "REDALDO_VS_STATIONARY_BLUESSI"
 
 redaldo = PPOAgent(
     model=SmallPPOModel(
@@ -20,18 +20,10 @@ redaldo = PPOAgent(
         learningSessions=args.learningSessions,
         name=runName
     ),
-    memorySize=0,
-)
-
-bluessi = PPOAgent(
-    model=SmallPPOModel(
-        actorWeightsPath=args.blueActorWeights,
-        criticWeightsPath=args.blueCriticWeights,
-        learningSessions=args.learningSessions,
-        name=runName
-    ),
     memorySize=120,
 )
+
+bluessi = StationaryAgent()
 
 stats = Statistics(
     sampleSize=10_000,
@@ -39,15 +31,15 @@ stats = Statistics(
 )
 
 if args.learningSessions == 0:
-    bluessi.model.saveWeights()
+    redaldo.model.saveWeights()
 
 runner = Runner(command="h")
 while runner.running:
     state = env.getState(bindState=True)
-    actionRed, _, _, _  = redaldo.chooseAction(state)
-    actionBlue, prob, val, _ = bluessi.chooseAction(state)
+    actionRed, prob, val, _ = redaldo.chooseAction(state)
+    actionBlue = bluessi.chooseAction(state)
     env.doAction(actionRed, actionBlue)
-    reward = env.getReward(env.getState(bindState=False), env.Team.Blue)
+    reward = env.getReward(env.getState(bindState=False), env.Team.Red)
 
     if reward.done == True:
         if reward.value < 0:
@@ -63,7 +55,7 @@ while runner.running:
         reward=reward.value,
         rewardComponents=reward.components,
         done=reward.done,
-        actionIndex=actionBlue.value,
+        actionIndex=actionRed.value,
         val=val,
         prob=prob,
     )
@@ -84,17 +76,17 @@ while runner.running:
     # )
 
     stats.addExperience(experience)
-    bluessi.memory.remember(experience)
+    redaldo.memory.remember(experience)
 
-    actorLoss, criticLoss = bluessi.tryToLearn(experience, env)
+    actorLoss, criticLoss = redaldo.tryToLearn(experience, env)
     if actorLoss is not None and criticLoss is not None:
         print(formatLosses(actorLoss, criticLoss))
         stats.addActorLoss(actorLoss)
         stats.addCriticLoss(criticLoss)
-        if bluessi.model.learningSessions >= 275_000:
+        if redaldo.model.learningSessions >= 25_000:
             runner.running = False
 
 runner.dispose()
 env.dispose()
 stats.dump()
-bluessi.model.saveWeights()
+redaldo.model.saveWeights()

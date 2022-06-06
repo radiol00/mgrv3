@@ -11,7 +11,7 @@ from hax.utils.formatters import *
 args = ArgumentParser()
 env = SimulationEnvironment(timeToLive=10 * 120)
 
-runName = "FINAL_BLUESSI_VS_LEARNED_REDALDO"
+runName = "FINAL_ADVERSARIAL_BLUESSI_VS_LEARNED_REDALDO"
 
 redaldo = PPOAgent(
     model=SmallPPOModel(
@@ -91,7 +91,7 @@ while runner.running:
         print(formatLosses(actorLoss, criticLoss))
         stats.addActorLoss(actorLoss)
         stats.addCriticLoss(criticLoss)
-        if bluessi.model.learningSessions >= 275_000:
+        if bluessi.model.learningSessions >= 50_000:
             runner.running = False
 
 runner.dispose()
