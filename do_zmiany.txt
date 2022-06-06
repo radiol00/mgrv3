@@ -1,1 +1,0 @@
-* chooseAction zmiana zwracanych wartosci

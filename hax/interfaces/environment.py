@@ -97,14 +97,14 @@ class Environment:
             enemy, player, ball = state.red, state.blue, state.ball
 
         # CHECK FOR GOAL
-        if state.ball.x >= self.blueGateX:
+        if ball.x >= self.blueGateX:
             return self.Reward(
                 value=self.Reward.winReward if team == Environment.Team.Red else self.Reward.loseReward,
                 components=components,
                 done=True
             )
 
-        if state.ball.x <= self.redGateX:
+        if ball.x <= self.redGateX:
             return self.Reward(
                 value=self.Reward.winReward if team == Environment.Team.Blue else self.Reward.loseReward,
                 components=components,

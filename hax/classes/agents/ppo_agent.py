@@ -1,3 +1,5 @@
+from typing import Any
+
 from hax.utils.memory import Memory
 from hax.interfaces.agent import Agent
 from hax.interfaces.environment import Environment
