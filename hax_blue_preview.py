@@ -6,7 +6,7 @@ from hax.utils.runner import Runner
 from hax.utils.formatters import *
 
 args = ArgumentParser()
-env = ImageExtractingEnvironment(timeToLive=10 * 120)
+env = ImageExtractingEnvironment(timeToLive=999_999_999)
 
 bluessi = PPOAgent(
     model=SampleEfficientSmallPPOModel(
