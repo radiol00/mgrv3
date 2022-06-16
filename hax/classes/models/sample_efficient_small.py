@@ -9,10 +9,6 @@ class SampleEfficientSmallPPOModel(PPOModel):
 
         self.saveWeightsPerLS = 100
 
-        self.setBatchSize(8)
-        self.setActorLearningRate(1e-5)
-        self.setCriticLearningRate(1e-4)
-        self.setEpochs(32)
 
     def buildModels(self) -> (Model, Model):
         from tensorflow.keras.layers import Input, Dense
@@ -32,4 +28,9 @@ class SampleEfficientSmallPPOModel(PPOModel):
         return actor, critic
 
     def usePlanner(self):
-        pass
+        if self.stage == -1:
+            self.setBatchSize(8)
+            self.setActorLearningRate(1e-5)
+            self.setCriticLearningRate(1e-4)
+            self.setEpochs(32)
+            self.stage = 0

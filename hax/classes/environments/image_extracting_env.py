@@ -43,7 +43,7 @@ class ImageExtractingEnvironment(Environment):
             def findNormally():
                 result = cv2.matchTemplate(threadFrame, img, cv2.TM_SQDIFF_NORMED)
 
-                mn, _, mnLoc, _ = cv2.minMaxLoc(result)
+                _, _, mnLoc, _ = cv2.minMaxLoc(result)
                 x, y = mnLoc
                 x += int(img.shape[0] / 2)
                 y += int(img.shape[1] / 2) + 1

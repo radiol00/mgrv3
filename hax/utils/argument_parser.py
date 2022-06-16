@@ -27,7 +27,7 @@ class ArgumentParser:
 
         parser.add_argument('-m',
                             dest="muted", default=False, action="store_true",
-                            help="if set, program will try to print as as little as possible")
+                            help="if set, program will try to print as little as possible")
 
         args = parser.parse_args()
 
