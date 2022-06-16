@@ -1,7 +1,7 @@
 from hax.classes.agents.ppo_agent import PPOAgent
 from hax.classes.agents.stationary_agent import StationaryAgent
 from hax.classes.environments.simulation_environment import SimulationEnvironment
-from hax.classes.models.small_espo import SmallESPOModel
+from hax.classes.models.small import SmallPPOModel
 from hax.utils.memory import Memory
 from hax.utils.argument_parser import ArgumentParser
 from hax.utils.runner import Runner
@@ -11,7 +11,7 @@ from hax.utils.formatters import *
 args = ArgumentParser()
 env = SimulationEnvironment(timeToLive=10 * 120)
 
-runName = "REDALDO_VS_STATIONARY_BLUESSI"
+runName = "REDALDO_VS_STATIONARY_POLICY"
 
 redaldo = PPOAgent(
     model=SmallPPOModel(
@@ -60,20 +60,20 @@ while runner.running:
         prob=prob,
     )
 
-    # print(
-    #     formatLearningSessionInfo(newMemories=redaldo.memory.newMemories,
-    #                               memorySize=redaldo.memory.size,
-    #                               learningSessions=redaldo.model.learningSessions, ) + \
-    #     " " + \
-    #     formatEnvironmentCompletionInfo(envAge=env.age,
-    #                                     envTimeToLive=env.timeToLive,
-    #                                     envEpisodes=env.episodes) + \
-    #     formatActionProbabilities(probs) + \
-    #     " " + \
-    #     formatAction(actionRed) + \
-    #     " " + \
-    #     formatReward(reward.value)
-    # )
+    print(
+        formatLearningSessionInfo(newMemories=redaldo.memory.newMemories,
+                                  memorySize=redaldo.memory.size,
+                                  learningSessions=redaldo.model.learningSessions, ) + \
+        " " + \
+        formatEnvironmentCompletionInfo(envAge=env.age,
+                                        envTimeToLive=env.timeToLive,
+                                        envEpisodes=env.episodes) + \
+        formatActionProbabilities(prob) + \
+        " " + \
+        formatAction(actionRed) + \
+        " " + \
+        formatReward(reward.value)
+    )
 
     stats.addExperience(experience)
     redaldo.memory.remember(experience)

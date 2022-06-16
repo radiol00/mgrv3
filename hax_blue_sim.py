@@ -9,7 +9,7 @@ from hax.utils.formatters import *
 
 args = ArgumentParser()
 env = SimulationEnvironment(timeToLive=10 * 120)
-runName = "DOUBLE_MEM_BIGGER_LR_BLUESSI_VS_LEARNED_REDALDO_SMALL"
+runName = "BLUESSI"
 
 redaldo = PPOAgent(
     model=SmallPPOModel(
@@ -28,7 +28,7 @@ bluessi = PPOAgent(
         learningSessions=args.learningSessions,
         name=runName
     ),
-    memorySize=240,
+    memorySize=120,
 )
 
 stats = Statistics(
@@ -48,20 +48,20 @@ while runner.running:
 
     reward = env.getReward(env.getState(bindState=False), env.Team.Blue)
 
-    # print(
-    #     formatLearningSessionInfo(newMemories=bluessi.memory.newMemories,
-    #                               memorySize=bluessi.memory.size,
-    #                               learningSessions=bluessi.model.learningSessions, ) + \
-    #     " " + \
-    #     formatEnvironmentCompletionInfo(envAge=env.age,
-    #                                     envTimeToLive=env.timeToLive,
-    #                                     envEpisodes=env.episodes) + \
-    #     formatActionProbabilities(probs) + \
-    #     " " + \
-    #     formatAction(actionBlue) + \
-    #     " " + \
-    #     formatReward(reward.value)
-    # )
+    print(
+        formatLearningSessionInfo(newMemories=bluessi.memory.newMemories,
+                                  memorySize=bluessi.memory.size,
+                                  learningSessions=bluessi.model.learningSessions, ) + \
+        " " + \
+        formatEnvironmentCompletionInfo(envAge=env.age,
+                                        envTimeToLive=env.timeToLive,
+                                        envEpisodes=env.episodes) + \
+        formatActionProbabilities(probs) + \
+        " " + \
+        formatAction(actionBlue) + \
+        " " + \
+        formatReward(reward.value)
+    )
 
     experience = Memory.Experience(
         normalizedState=state.toStateVector(normalized=True),
@@ -71,7 +71,7 @@ while runner.running:
         done=reward.done,
         actionIndex=actionBlue.value,
         val=val,
-        prob=prob,
+        prob=probs,
     )
 
     stats.addExperience(experience)

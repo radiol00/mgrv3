@@ -3,7 +3,6 @@ from hax.classes.agents.random_agent import RandomAgent
 from hax.classes.environments.simulation_environment import SimulationEnvironment
 from hax.utils.memory import Memory
 from hax.classes.models.small import SmallPPOModel
-from hax.classes.models.medium_relu import MediumReLUPPOModel
 from hax.utils.argument_parser import ArgumentParser
 from hax.utils.runner import Runner
 from hax.utils.statistics import Statistics
@@ -25,7 +24,7 @@ redaldo = PPOAgent(
 )
 
 bluessi = PPOAgent(
-    model=MediumReLUPPOModel(
+    model=SmallPPOModel(
         actorWeightsPath=args.blueActorWeights,
         criticWeightsPath=args.blueCriticWeights,
         learningSessions=args.learningSessions,

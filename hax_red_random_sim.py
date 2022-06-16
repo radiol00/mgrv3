@@ -11,7 +11,7 @@ from hax.utils.formatters import *
 args = ArgumentParser()
 env = SimulationEnvironment(timeToLive=10 * 120)
 
-runName = "FINAL_REDALDO_VS_RANDOM_BLUESSI"
+runName = "REDALDO_VS_RANDOM_POLICY"
 
 redaldo = PPOAgent(
     model=SmallPPOModel(
@@ -60,23 +60,23 @@ while runner.running:
         prob=prob,
     )
 
-    # print(
-    #     formatLearningSessionInfo(newMemories=redaldo.memory.newMemories,
-    #                               memorySize=redaldo.memory.size,
-    #                               learningSessions=redaldo.model.learningSessions, ) + \
-    #     " " + \
-    #     formatEnvironmentCompletionInfo(envAge=env.age,
-    #                                     envTimeToLive=env.timeToLive,
-    #                                     envEpisodes=env.episodes) + \
-    #     formatActionProbabilities(probs) + \
-    #     " " + \
-    #     formatAction(actionRed) + \
-    #     " " + \
-    #     formatReward(reward.value)
-    # )
+    print(
+        formatLearningSessionInfo(newMemories=redaldo.memory.newMemories,
+                                  memorySize=redaldo.memory.size,
+                                  learningSessions=redaldo.model.learningSessions, ) + \
+        " " + \
+        formatEnvironmentCompletionInfo(envAge=env.age,
+                                        envTimeToLive=env.timeToLive,
+                                        envEpisodes=env.episodes) + \
+        formatActionProbabilities(prob) + \
+        " " + \
+        formatAction(actionRed) + \
+        " " + \
+        formatReward(reward.value)
+    )
 
-    stats.addExperience(experience)
     redaldo.memory.remember(experience)
+    stats.addExperience(experience)
 
     actorLoss, criticLoss = redaldo.tryToLearn(experience, env)
     if actorLoss is not None and criticLoss is not None:

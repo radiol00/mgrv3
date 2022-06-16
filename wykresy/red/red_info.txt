@@ -1,8 +1,0 @@
-* decyzyjnych: 2_000_000
-* sesji: 24769
-max
-ballGateTraj    1.376242
-toBallTraj      0.477105
-
-epizodów: 14777
-min episode length: 63
